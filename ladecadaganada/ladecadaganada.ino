@@ -9,14 +9,6 @@ const int motorPin11 = 8;
 const int motorPin20 = 10;
 const int motorPin21 = 11;
 const int velMotor = 255 * 0.8;
-void laderecha()
-{
-laderecha:
-analogWrite(motorPin10, 0);
-analogWrite(motorPin11, velMotor);
-analogWrite(motorPin20, velMotor);
-analogWrite(motorPin21, 0);
-}
 
 void setup()
 {
@@ -58,6 +50,7 @@ void loop()
   Serial.print("Distancia derecha: ");
   Serial.println(cm20);
   // delay(250);
+  
   if (cm10 > 10 && cm20 < 10)
   {
     //El caso en que no tiene nada adelante pero si a la derecha
@@ -74,7 +67,6 @@ void loop()
     analogWrite(motorPin11, velMotor);
     analogWrite(motorPin20, velMotor);
     analogWrite(motorPin21, 0);
-    delay(250);
   }
 
   if (cm10 <= 10 && cm20 <= 10)
@@ -84,12 +76,14 @@ void loop()
     analogWrite(motorPin11, 0);
     analogWrite(motorPin20, 0);
     analogWrite(motorPin21, velMotor);
-    delay(250);
   }
   
   if (cm10 > 10 && cm20 > 10)
+    //Prioriza girar a la derecha antes de seguir adelante
   {
-    goto laderecha
-    delay(250);
+    analogWrite(motorPin10, 0);
+    analogWrite(motorPin11, velMotor);
+    analogWrite(motorPin20, velMotor);
+    analogWrite(motorPin21, 0);
   }
 }
