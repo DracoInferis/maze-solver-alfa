@@ -4,12 +4,12 @@ const int trigPin10 = 4;
 const int echoPin20 = 5;
 const int trigPin20 = 6;
 //motorPin10 es el motor de la izquierda y motorPin20 el de la derecha
-const int motorPin10 = 9;
-const int motorPin11 = 8;
-const int motorPin20 = 10;
-const int motorPin21 = 11;
-const int velMotorIzq = 255;
-const int velMotorDer = 255 * 0.71;
+const int motorPin10 = 9; //IN2 va al 9
+const int motorPin11 = 8; //IN1 va al 8
+const int motorPin20 = 10; //IN3 va al 10
+const int motorPin21 = 11; //IN4 va al 11
+const int velMotorIzq = 255 * 0.95;
+const int velMotorDer = 255 * 0.9;
 
 void setup()
 {
@@ -57,7 +57,7 @@ void loop()
       analogWrite(motorPin11, 0);
       analogWrite(motorPin20, 0);
       analogWrite(motorPin21, velMotorDer);
-      delay(280);
+      delay(500);
       break;
     default:
       //derecha
@@ -74,25 +74,25 @@ int direccionBot()
   int direccion;
   int cm10 = ping(trigPin10, echoPin10);
   int cm20 = ping(trigPin20, echoPin20);
-  if (cm10 > 15 && cm20 < 15)
+  if (cm10 > 10 && cm20 < 15)
   {
     //El caso en que no tiene nada adelante pero si a la derecha
     direccion = 0;
     return direccion;
   }
-  if (cm10 <= 15 && cm20 > 15)
+  if (cm10 <= 10 && cm20 > 15)
   {
     //El caso en que tiene algo adelante pero no a la derecha
     direccion = 1;
     return direccion;
   }
-  if (cm10 <= 15 && cm20 <= 15)
+  if (cm10 <= 10 && cm20 <= 15)
   {
     //El caso en que tiene algo a la derecha y adelante
     direccion = 2;
     return direccion;
   }
-  if (cm10 > 15 && cm20 > 15)
+  if (cm10 > 10 && cm20 > 15)
   //Prioriza girar a la derecha antes de seguir adelante
   {
     direccion = 1;
