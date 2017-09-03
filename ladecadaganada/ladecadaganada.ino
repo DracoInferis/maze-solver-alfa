@@ -8,7 +8,8 @@ const int motorPin10 = 9;
 const int motorPin11 = 8;
 const int motorPin20 = 10;
 const int motorPin21 = 11;
-const int velMotor = 255 * 0.8;
+const int velMotorIzq = 255;
+const int velMotorDer = 255 * 0.71;
 
 void setup()
 {
@@ -21,6 +22,81 @@ void setup()
   pinMode(trigPin20, OUTPUT);
   pinMode(echoPin10, INPUT);
   pinMode(echoPin20, INPUT);
+}
+
+void loop()
+{
+  //cm10 es el sensor de adelante, cm20 es el sensor de la derecha
+  // int cm10 = ping(trigPin10, echoPin10);
+  // Serial.print("Distancia adelante: ");
+  // Serial.println(cm10);
+  // delay(250);
+  // int cm20 = ping(trigPin20, echoPin20);
+  // Serial.print("Distancia derecha: ");
+  // Serial.println(cm20);
+  // delay(250);
+  int dirBot = direccionBot();
+  switch (dirBot) {
+    case 0:
+      //adelante
+      analogWrite(motorPin10, velMotorIzq);
+      analogWrite(motorPin11, 0);
+      analogWrite(motorPin20, velMotorDer);
+      analogWrite(motorPin21, 0);
+      break;
+    case 1:
+      //derecha
+      analogWrite(motorPin10, 0);
+      analogWrite(motorPin11, velMotorIzq);
+      analogWrite(motorPin20, velMotorDer);
+      analogWrite(motorPin21, 0);
+      break;
+    case 2:
+      //izquierda
+      analogWrite(motorPin10, velMotorIzq);
+      analogWrite(motorPin11, 0);
+      analogWrite(motorPin20, 0);
+      analogWrite(motorPin21, velMotorDer);
+      break;
+    default:
+      //derecha
+      analogWrite(motorPin10, 0);
+      analogWrite(motorPin11, velMotorIzq);
+      analogWrite(motorPin20, velMotorDer);
+      analogWrite(motorPin21, 0);
+      break;
+  }
+}
+
+int direccionBot()
+{
+  int direccion;
+  int cm10 = ping(trigPin10, echoPin10);
+  int cm20 = ping(trigPin20, echoPin20);
+  if (cm10 > 15 && cm20 < 15)
+  {
+    //El caso en que no tiene nada adelante pero si a la derecha
+    direccion = 0;
+    return direccion;
+  }
+  if (cm10 <= 15 && cm20 > 15)
+  {
+    //El caso en que tiene algo adelante pero no a la derecha
+    direccion = 1;
+    return direccion;
+  }
+  if (cm10 <= 15 && cm20 <= 15)
+  {
+    //El caso en que tiene algo a la derecha y adelante
+    direccion = 2;
+    return direccion;
+  }
+  if (cm10 > 15 && cm20 > 15)
+  //Prioriza girar a la derecha antes de seguir adelante
+  {
+    direccion = 1;
+    return direccion;
+  }
 }
 
 int ping(int trigPin10, int echoPin10)
@@ -37,53 +113,4 @@ int ping(int trigPin10, int echoPin10)
 
   distanceCm = duration * 10 / 292 / 2; //convertimos a distancia, en cm
   return distanceCm;
-}
-
-void loop()
-{
-  //cm10 es el sensor de adelante, cm20 es el sensor de la derecha
-  int cm10 = ping(trigPin10, echoPin10);
-  Serial.print("Distancia adelante: ");
-  Serial.println(cm10);
-  // delay(250);
-  int cm20 = ping(trigPin20, echoPin20);
-  Serial.print("Distancia derecha: ");
-  Serial.println(cm20);
-  // delay(250);
-  
-  if (cm10 > 10 && cm20 < 10)
-  {
-    //El caso en que no tiene nada adelante pero si a la derecha
-    analogWrite(motorPin10, velMotor);
-    analogWrite(motorPin11, 0);
-    analogWrite(motorPin20, velMotor);
-    analogWrite(motorPin21, 0);
-  }
-
-  if (cm10 <= 10 && cm20 > 10)
-  {
-    //El caso en que tiene algo adelante pero no a la derecha
-    analogWrite(motorPin10, 0);
-    analogWrite(motorPin11, velMotor);
-    analogWrite(motorPin20, velMotor);
-    analogWrite(motorPin21, 0);
-  }
-
-  if (cm10 <= 10 && cm20 <= 10)
-  {
-    //El caso en que tiene algo a la derecha y adelante
-    analogWrite(motorPin10, velMotor);
-    analogWrite(motorPin11, 0);
-    analogWrite(motorPin20, 0);
-    analogWrite(motorPin21, velMotor);
-  }
-  
-  if (cm10 > 10 && cm20 > 10)
-    //Prioriza girar a la derecha antes de seguir adelante
-  {
-    analogWrite(motorPin10, 0);
-    analogWrite(motorPin11, velMotor);
-    analogWrite(motorPin20, velMotor);
-    analogWrite(motorPin21, 0);
-  }
 }
