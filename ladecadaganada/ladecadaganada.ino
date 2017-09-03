@@ -9,7 +9,7 @@ const int motorPin11 = 8; //IN1 va al 8
 const int motorPin20 = 10; //IN3 va al 10
 const int motorPin21 = 11; //IN4 va al 11
 const int velMotorIzq = 255 * 0.95;
-const int velMotorDer = 255 * 0.9;
+const int velMotorDer = 255 * 0.90;
 
 void setup()
 {
@@ -38,33 +38,17 @@ void loop()
   int dirBot = direccionBot();
   switch (dirBot) {
     case 0:
-      //adelante
-      analogWrite(motorPin10, velMotorIzq);
-      analogWrite(motorPin11, 0);
-      analogWrite(motorPin20, velMotorDer);
-      analogWrite(motorPin21, 0);
+      Adelante();
       break;
     case 1:
-      //derecha
-      analogWrite(motorPin10, 0);
-      analogWrite(motorPin11, velMotorIzq);
-      analogWrite(motorPin20, velMotorDer);
-      analogWrite(motorPin21, 0);
+      Derecha();
       break;
     case 2:
-      //izquierda
-      analogWrite(motorPin10, velMotorIzq);
-      analogWrite(motorPin11, 0);
-      analogWrite(motorPin20, 0);
-      analogWrite(motorPin21, velMotorDer);
-      delay(500);
+      Izquierda();
+      delay(1000);
       break;
     default:
-      //derecha
-      analogWrite(motorPin10, 0);
-      analogWrite(motorPin11, velMotorIzq);
-      analogWrite(motorPin20, velMotorDer);
-      analogWrite(motorPin21, 0);
+      Derecha();
       break;
   }
 }
@@ -114,4 +98,26 @@ int ping(int trigPin10, int echoPin10)
 
   distanceCm = duration * 10 / 292 / 2; //convertimos a distancia, en cm
   return distanceCm;
+}
+
+void Adelante()
+{
+  analogWrite(motorPin10, velMotorIzq);
+  analogWrite(motorPin11, 0);
+  analogWrite(motorPin20, velMotorDer);
+  analogWrite(motorPin21, 0);
+}
+void Derecha()
+{
+  analogWrite(motorPin10, 0);
+  analogWrite(motorPin11, velMotorIzq);
+  analogWrite(motorPin20, velMotorDer);
+  analogWrite(motorPin21, 0);
+}
+void Izquierda()
+{
+  analogWrite(motorPin10, velMotorIzq);
+  analogWrite(motorPin11, 0);
+  analogWrite(motorPin20, 0);
+  analogWrite(motorPin21, velMotorDer);
 }
