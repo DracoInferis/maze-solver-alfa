@@ -57,6 +57,7 @@ void loop()
       analogWrite(motorPin11, 0);
       analogWrite(motorPin20, 0);
       analogWrite(motorPin21, velMotorDer);
+      delay(280);
       break;
     default:
       //derecha
