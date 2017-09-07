@@ -4,12 +4,12 @@ const int trigPin10 = 4;
 const int echoPin20 = 5;
 const int trigPin20 = 6;
 //motorPin10 es el motor de la izquierda y motorPin20 el de la derecha
-const int motorPin10 = 9; //IN2 va al 9
-const int motorPin11 = 8; //IN1 va al 8
+const int motorPin10 = 8; //IN2 va al 9
+const int motorPin11 = 9; //IN1 va al 8
 const int motorPin20 = 10; //IN3 va al 10
 const int motorPin21 = 11; //IN4 va al 11
-const int velMotorIzq = 255 * 0.95;
-const int velMotorDer = 255 * 0.90;
+const int velMotorIzq = 255 * 0.68;
+const int velMotorDer = 255 * 0.95;
 
 void setup()
 {
@@ -41,11 +41,16 @@ void loop()
       Adelante();
       break;
     case 1:
+      Adelante();
+      delay(800);
       Derecha();
+      delay(50);
       break;
     case 2:
+      Adelante();
+      delay(800);
       Izquierda();
-      delay(1000);
+      delay(870);
       break;
     default:
       Derecha();
@@ -58,30 +63,30 @@ int direccionBot()
   int direccion;
   int cm10 = ping(trigPin10, echoPin10);
   int cm20 = ping(trigPin20, echoPin20);
-  if (cm10 > 10 && cm20 < 15)
+  if (cm10 > 8 && cm20 < 8)
   {
     //El caso en que no tiene nada adelante pero si a la derecha
     direccion = 0;
     return direccion;
   }
-  if (cm10 <= 10 && cm20 > 15)
+  if (cm10 <= 8 && cm20 > 10)
   {
     //El caso en que tiene algo adelante pero no a la derecha
     direccion = 1;
     return direccion;
   }
-  if (cm10 <= 10 && cm20 <= 15)
+  if (cm10 <= 8 && cm20 <= 10)
   {
     //El caso en que tiene algo a la derecha y adelante
     direccion = 2;
     return direccion;
   }
-  if (cm10 > 10 && cm20 > 15)
-  //Prioriza girar a la derecha antes de seguir adelante
-  {
-    direccion = 1;
-    return direccion;
-  }
+  // if (cm10 > 10 && cm20 > 15)
+  // //Prioriza girar a la derecha antes de seguir adelante
+  // {
+  //   direccion = 1;
+  //   return direccion;
+  // }
 }
 
 int ping(int trigPin10, int echoPin10)
@@ -109,15 +114,15 @@ void Adelante()
 }
 void Derecha()
 {
-  analogWrite(motorPin10, 0);
-  analogWrite(motorPin11, velMotorIzq);
-  analogWrite(motorPin20, velMotorDer);
-  analogWrite(motorPin21, 0);
-}
-void Izquierda()
-{
   analogWrite(motorPin10, velMotorIzq);
   analogWrite(motorPin11, 0);
   analogWrite(motorPin20, 0);
   analogWrite(motorPin21, velMotorDer);
+}
+void Izquierda()
+{
+  analogWrite(motorPin10, 0);
+  analogWrite(motorPin11, velMotorIzq);
+  analogWrite(motorPin20, velMotorDer);
+  analogWrite(motorPin21, 0);
 }
