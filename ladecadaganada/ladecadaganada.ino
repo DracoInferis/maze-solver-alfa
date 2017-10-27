@@ -4,11 +4,11 @@ const int trigPin10 = 4;
 const int echoPin20 = 5;
 const int trigPin20 = 6;
 //motorPin10 es el motor de la izquierda y motorPin20 el de la derecha
-const int motorPin10 = 9; //IN2 va al 9
-const int motorPin11 = 8; //IN1 va al 8
+const int motorPin10 = 8; //IN2 va al 9
+const int motorPin11 = 9; //IN1 va al 8
 const int motorPin20 = 10; //IN3 va al 10
 const int motorPin21 = 11; //IN4 va al 11
-const int velMotorIzq = 255 * 0.95;
+const int velMotorIzq = 255 * 0.90;
 const int velMotorDer = 255 * 0.90;
 
 void setup()
@@ -45,7 +45,6 @@ void loop()
       break;
     case 2:
       Izquierda();
-      delay(1000);
       break;
     default:
       Derecha();
@@ -76,12 +75,12 @@ int direccionBot()
     direccion = 2;
     return direccion;
   }
-  if (cm10 > 10 && cm20 > 15)
-  //Prioriza girar a la derecha antes de seguir adelante
-  {
-    direccion = 1;
-    return direccion;
-  }
+  // if (cm10 > 10 && cm20 > 15)
+  // //Prioriza girar a la derecha antes de seguir adelante
+  // {
+  //   direccion = 1;
+  //   return direccion;
+  // }
 }
 
 int ping(int trigPin10, int echoPin10)
@@ -118,6 +117,13 @@ void Izquierda()
 {
   analogWrite(motorPin10, velMotorIzq);
   analogWrite(motorPin11, 0);
+  analogWrite(motorPin20, 0);
+  analogWrite(motorPin21, velMotorDer);
+}
+void Atras()
+{
+  analogWrite(motorPin10, 0);
+  analogWrite(motorPin11, velMotorIzq);
   analogWrite(motorPin20, 0);
   analogWrite(motorPin21, velMotorDer);
 }
