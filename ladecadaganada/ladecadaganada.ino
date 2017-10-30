@@ -49,6 +49,9 @@ void loop()
     break;
   case 3:
     Atras();
+    delay(800);
+    Derecha();
+    delay(800);
     break;
   default:
     Derecha();
