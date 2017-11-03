@@ -1,15 +1,20 @@
+#include <NewPing.h>
+
 //echoPin10 es el de adelante, echoPin20 es el de la derecha
 const int echoPin10 = 3;
 const int trigPin10 = 4;
 const int echoPin20 = 5;
 const int trigPin20 = 6;
+NewPing sonar10(trigPin10, echoPin10, 200);
+NewPing sonar20(trigPin20, echoPin20
+, 200);
 //motorPin10 es el motor de la izquierda y motorPin20 el de la derecha
 const int motorPin10 = 8;
 const int motorPin11 = 9;
 const int motorPin20 = 10;
 const int motorPin21 = 11;
-const int velMotorIzq = 255 * 0.80;
-const int velMotorDer = 255 * 0.90;
+const int velMotorIzq = 255 * 0.65;
+const int velMotorDer = 255 * 0.65;
 
 void setup()
 {
@@ -27,14 +32,14 @@ void setup()
 void loop()
 {
   //cm10 es el sensor de adelante, cm20 es el sensor de la derecha
-  // int cm10 = ping(trigPin10, echoPin10);
-  // Serial.print("Distancia adelante: ");
-  // Serial.println(cm10);
-  // delay(250);
-  // int cm20 = ping(trigPin20, echoPin20);
-  // Serial.print("Distancia derecha: ");
-  // Serial.println(cm20);
-  // delay(250);
+//   int cm10 = ping(trigPin10, echoPin10);
+   Serial.print("Distancia adelante: ");
+   Serial.println(sonar10.ping_cm());
+   delay(250);
+//   int cm20 = ping(trigPin20, echoPin20);
+   Serial.print("Distancia derecha: ");
+   Serial.println(sonar20.ping_cm());
+   delay(250);
   int dirBot = direccionBot();
   switch (dirBot)
   {
@@ -53,6 +58,9 @@ void loop()
     Izquierda();
     delay(250);
     break;
+  case 4:
+   derechaNeutral();
+   break;
   default:
     Derecha();
     break;
@@ -62,8 +70,8 @@ void loop()
 int direccionBot()
 {
   int direccion;
-  int cm10 = ping(trigPin10, echoPin10);
-  int cm20 = ping(trigPin20, echoPin20);
+  int cm10 = sonar10.ping_cm();
+  int cm20 = sonar20.ping_cm();
   if (cm10 > 10 && cm20 < 15)
   {
     //El caso en que no tiene nada adelante pero si a la derecha.
@@ -85,7 +93,7 @@ int direccionBot()
   if (cm10 > 10 && cm20 > 15)
   //Prioriza girar a la derecha antes de seguir adelante.
   {
-    direccion = 1;
+    direccion = 4;
     return direccion;
   }
   if (cm10 <= 2)
@@ -96,21 +104,21 @@ int direccionBot()
   }
 }
 
-int ping(int trigPin10, int echoPin10)
-{
-  long duration, distanceCm;
-
-  digitalWrite(trigPin10, LOW); //para generar un pulso limpio ponemos a 0 4us
-  delayMicroseconds(10);
-  digitalWrite(trigPin10, HIGH); //generamos Trigger (disparo) de 10us
-  delayMicroseconds(10);
-  digitalWrite(trigPin10, LOW);
-
-  duration = pulseIn(echoPin10, HIGH); //medimos el tiempo entre pulsos, en microsegundos
-
-  distanceCm = duration * 10 / 292 / 2; //convertimos a distancia, en cm
-  return distanceCm;
-}
+//int ping(int trigPin10, int echoPin10)
+//{
+//  long duration, distanceCm;
+//
+//  digitalWrite(trigPin10, LOW); //para generar un pulso limpio ponemos a 0 4us
+//  delayMicroseconds(10);
+//  digitalWrite(trigPin10, HIGH); //generamos Trigger (disparo) de 10us
+//  delayMicroseconds(10);
+//  digitalWrite(trigPin10, LOW);
+//
+//  duration = pulseIn(echoPin10, HIGH); //medimos el tiempo entre pulsos, en microsegundos
+//
+//  distanceCm = duration * 10 / 292 / 2; //convertimos a distancia, en cm
+//  return distanceCm;
+//}
 
 void Adelante()
 {
@@ -139,4 +147,11 @@ void Atras()
   analogWrite(motorPin11, velMotorIzq);
   analogWrite(motorPin20, 0);
   analogWrite(motorPin21, velMotorDer);
+}
+void derechaNeutral()
+{
+  analogWrite(motorPin10, 0);
+  analogWrite(motorPin11, velMotorIzq);
+  analogWrite(motorPin20, velMotorDer);
+  analogWrite(motorPin21, 127);
 }
