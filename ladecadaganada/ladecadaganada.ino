@@ -1,129 +1,274 @@
-//echoPin10 es el de adelante, echoPin20 es el de la derecha
-const int echoPin10 = 3;
-const int trigPin10 = 4;
-const int echoPin20 = 5;
-const int trigPin20 = 6;
-//motorPin10 es el motor de la izquierda y motorPin20 el de la derecha
-const int motorPin10 = 8; //IN2 va al 9
-const int motorPin11 = 9; //IN1 va al 8
-const int motorPin20 = 10; //IN3 va al 10
-const int motorPin21 = 11; //IN4 va al 11
-const int velMotorIzq = 255 * 0.90;
-const int velMotorDer = 255 * 0.90;
 
-void setup()
-{
+
+long i;
+void setup() {
+
+
+Serial.begin(9600);
+
+ pinMode(10,OUTPUT);
+pinMode(11,OUTPUT);
+  pinMode( 3 , INPUT );
+
+  pinMode( 2 , OUTPUT );
+  pinMode( 12 , INPUT );
   Serial.begin(9600);
-  pinMode(motorPin10, OUTPUT);
-  pinMode(motorPin11, OUTPUT);
-  pinMode(motorPin20, OUTPUT);
-  pinMode(motorPin21, OUTPUT);
-  pinMode(trigPin10, OUTPUT);
-  pinMode(trigPin20, OUTPUT);
-  pinMode(echoPin10, INPUT);
-  pinMode(echoPin20, INPUT);
-}
 
-void loop()
-{
-  //cm10 es el sensor de adelante, cm20 es el sensor de la derecha
-  // int cm10 = ping(trigPin10, echoPin10);
-  // Serial.print("Distancia adelante: ");
-  // Serial.println(cm10);
-  // delay(250);
-  // int cm20 = ping(trigPin20, echoPin20);
-  // Serial.print("Distancia derecha: ");
-  // Serial.println(cm20);
-  // delay(250);
-  int dirBot = direccionBot();
-  switch (dirBot) {
-    case 0:
-      Adelante();
-      break;
-    case 1:
-      Derecha();
-      break;
-    case 2:
-      Izquierda();
-      break;
-    default:
-      Derecha();
-      break;
-  }
-}
+  pinMode( 5 , INPUT );
 
-int direccionBot()
-{
-  int direccion;
-  int cm10 = ping(trigPin10, echoPin10);
-  int cm20 = ping(trigPin20, echoPin20);
-  if (cm10 > 10 && cm20 < 15)
-  {
-    //El caso en que no tiene nada adelante pero si a la derecha
-    direccion = 0;
-    return direccion;
-  }
-  if (cm10 <= 10 && cm20 > 15)
-  {
-    //El caso en que tiene algo adelante pero no a la derecha
-    direccion = 1;
-    return direccion;
-  }
-  if (cm10 <= 10 && cm20 <= 15)
-  {
-    //El caso en que tiene algo a la derecha y adelante
-    direccion = 2;
-    return direccion;
-  }
-  // if (cm10 > 10 && cm20 > 15)
-  // //Prioriza girar a la derecha antes de seguir adelante
-  // {
-  //   direccion = 1;
-  //   return direccion;
-  // }
-}
+  pinMode( 4 , OUTPUT );
 
-int ping(int trigPin10, int echoPin10)
-{
-  long duration, distanceCm;
+  pinMode(6,OUTPUT);
 
-  digitalWrite(trigPin10, LOW); //para generar un pulso limpio ponemos a 0 4us
-  delayMicroseconds(10);
-  digitalWrite(trigPin10, HIGH); //generamos Trigger (disparo) de 10us
-  delayMicroseconds(10);
-  digitalWrite(trigPin10, LOW);
+  pinMode(7,OUTPUT);
 
-  duration = pulseIn(echoPin10, HIGH); //medimos el tiempo entre pulsos, en microsegundos
+  pinMode(8,OUTPUT);
 
-  distanceCm = duration * 10 / 292 / 2; //convertimos a distancia, en cm
-  return distanceCm;
-}
+  pinMode(9,OUTPUT);
+pinMode(A5,OUTPUT);
+pinMode(A4,OUTPUT);
+pinMode(A3,OUTPUT);
+pinMode(A2,OUTPUT);
+pinMode(A1,OUTPUT);
+pinMode(A0,OUTPUT);
 
-void Adelante()
-{
-  analogWrite(motorPin10, velMotorIzq);
-  analogWrite(motorPin11, 0);
-  analogWrite(motorPin20, velMotorDer);
-  analogWrite(motorPin21, 0);
+ }
+void loop() {
+
+
+  long duracion_adelante,adelante,duracion_derecha,derecha;
+
+  digitalWrite(2, LOW); 
+     delayMicroseconds(2); 
+     digitalWrite(2, HIGH);  
+     delayMicroseconds(5);           
+     digitalWrite(2, LOW);  
+     duracion_adelante = pulseIn(3, HIGH);
+     adelante = duracion_adelante/29/2;
+        Serial.println("adelante");
+    Serial.println(adelante);
+ 
+     digitalWrite(4, LOW); 
+     delayMicroseconds(2); 
+     digitalWrite(4, HIGH);  
+     delayMicroseconds(5);           
+     digitalWrite(4, LOW);  
+     duracion_derecha = pulseIn(5, HIGH);
+     derecha = duracion_derecha/29/2;
+          Serial.println("derecha");
+     Serial.println(derecha);
+  
+  
+    
+   if (adelante>=4){
+      if (derecha>0 && derecha<=1){
+      analogWrite(11,60);
+      analogWrite(10,90);
+      digitalWrite(A0,HIGH);
+      digitalWrite(8,HIGH);
+      digitalWrite(A1,LOW);
+         digitalWrite(9,LOW);
+         }
+             if (derecha>1 && derecha<=2){
+      analogWrite(11,70);
+      analogWrite(10,90);
+      digitalWrite(A0,HIGH);
+      digitalWrite(8,HIGH);
+      digitalWrite(A1,LOW);
+         digitalWrite(9,LOW);
+         }
+             if (derecha>2 && derecha<=3){
+      analogWrite(11,70);
+      analogWrite(10,80);
+      digitalWrite(A0,HIGH);
+      digitalWrite(8,HIGH);
+      digitalWrite(A1,LOW);
+         digitalWrite(9,LOW);
+         }
+             if (derecha>3 && derecha<=4){
+      analogWrite(11,100);
+      analogWrite(10,70);
+      digitalWrite(A0,HIGH);
+      digitalWrite(8,HIGH);
+      digitalWrite(A1,LOW);
+         digitalWrite(9,LOW);
+         }
+             if (derecha>4 && derecha<=5){
+      analogWrite(11,90);
+      analogWrite(10,70);
+      digitalWrite(A0,HIGH);
+      digitalWrite(8,HIGH);
+      digitalWrite(A1,LOW);
+         digitalWrite(9,LOW);
+         }
+           if (derecha>5 && derecha<=6){
+      analogWrite(11,100);
+      analogWrite(10,70);
+      digitalWrite(A0,HIGH);
+      digitalWrite(8,HIGH);
+      digitalWrite(A1,LOW);
+         digitalWrite(9,LOW);
+         }
+              if (derecha>6 && derecha<=7){
+      analogWrite(11,100);
+      analogWrite(10,70);
+      digitalWrite(A0,HIGH);
+      digitalWrite(8,HIGH);
+      digitalWrite(A1,LOW);
+         digitalWrite(9,LOW);
+         }
+        if (derecha>7 && derecha<=8){
+      analogWrite(11,100);
+      analogWrite(10,70);
+      digitalWrite(A0,HIGH);
+      digitalWrite(8,HIGH);
+      digitalWrite(A1,LOW);
+         digitalWrite(9,LOW);
+         }
+              if (derecha>7 && derecha<=8){
+      analogWrite(11,100);
+      analogWrite(10,80);
+      digitalWrite(A0,HIGH);
+      digitalWrite(8,HIGH);
+      digitalWrite(A1,LOW);
+         digitalWrite(9,LOW);
+         }
+            
+              if (derecha>8 && derecha<=15){
+      analogWrite(11,100);
+      analogWrite(10,80);
+      digitalWrite(A0,HIGH);
+      digitalWrite(8,HIGH);
+      digitalWrite(A1,LOW);
+         digitalWrite(9,LOW);
+         }
+    
+    if (derecha>15){
+    
+      analogWrite(11,50);
+      analogWrite(10,50);
+      digitalWrite(A1,HIGH);
+      digitalWrite(9,HIGH);
+      digitalWrite(A0,LOW);
+      digitalWrite(8,LOW);
+      delay(50);
+  
+      
+      analogWrite(11,80);
+      analogWrite(10,80);
+      digitalWrite(A1,HIGH);
+      digitalWrite(8,HIGH);
+      digitalWrite(A0,LOW);
+      digitalWrite(9,LOW);
+      delay(100);
+      
+      analogWrite(11,0);
+      analogWrite(10,0);
+      digitalWrite(A1,HIGH);
+      digitalWrite(8,HIGH);
+      digitalWrite(A0,LOW);
+      digitalWrite(9,LOW);
+      delay(100);
+        analogWrite(11,80);
+      analogWrite(10,80);
+      digitalWrite(A0,HIGH);
+      digitalWrite(8,HIGH);
+      digitalWrite(A1,LOW);
+      digitalWrite(9,LOW);
+      delay(400);
+    
+   
+     }
+      }
+     if(adelante<4)
+     {
+      if(derecha>=0 && derecha<2){
+      
+       analogWrite(11,100);
+      analogWrite(10,100);
+      digitalWrite(A0,HIGH);
+      digitalWrite(8,HIGH);
+      digitalWrite(A0,LOW);
+         digitalWrite(8,LOW);
+         delay(200); 
+    analogWrite(11,80);
+      analogWrite(10,80);
+      digitalWrite(A0,HIGH);
+      digitalWrite(9,HIGH);
+      digitalWrite(A0,LOW);
+         digitalWrite(8,LOW);
+         delay(200); 
+          analogWrite(11,0);
+      analogWrite(10,0);
+      digitalWrite(A0,LOW);
+      digitalWrite(9,HIGH);
+      digitalWrite(A1,LOW);
+      digitalWrite(8,LOW);
+      delay(220); 
+
+   analogWrite(11,90);
+      analogWrite(10,90);
+      digitalWrite(A0,HIGH);
+      digitalWrite(9,HIGH);
+      digitalWrite(A1,LOW);
+      digitalWrite(8,LOW);
+      delay(320); 
+              analogWrite(11,0);
+      analogWrite(10,0);
+      digitalWrite(A0,LOW);
+      digitalWrite(9,HIGH);
+      digitalWrite(A1,LOW);
+      digitalWrite(8,LOW);
+      delay(400);
+       }
+     
+       if(derecha>=2  ){
+    
+    
+    analogWrite(11,80);
+      analogWrite(10,80);
+      digitalWrite(A1,HIGH);
+      digitalWrite(9,HIGH);
+      digitalWrite(A0,LOW);
+         digitalWrite(8,LOW);
+         delay(200); 
+          analogWrite(11,0);
+      analogWrite(10,0);
+      digitalWrite(A0,LOW);
+      digitalWrite(9,HIGH);
+      digitalWrite(A1,LOW);
+      digitalWrite(8,LOW);
+      delay(220); 
+
+   analogWrite(11,70);
+      analogWrite(10,70);
+      digitalWrite(A0,HIGH);
+      digitalWrite(9,HIGH);
+      digitalWrite(A1,LOW);
+      digitalWrite(8,LOW);
+      delay(420); 
+   
+   analogWrite(11,0);
+      analogWrite(10,0);
+      digitalWrite(A0,HIGH);
+      digitalWrite(9,HIGH);
+      digitalWrite(A1,LOW);
+      digitalWrite(8,LOW);
+      delay(400);
+     
+  
+   
+ }
+        
 }
-void Derecha()
-{
-  analogWrite(motorPin10, 0);
-  analogWrite(motorPin11, velMotorIzq);
-  analogWrite(motorPin20, velMotorDer);
-  analogWrite(motorPin21, 0);
-}
-void Izquierda()
-{
-  analogWrite(motorPin10, velMotorIzq);
-  analogWrite(motorPin11, 0);
-  analogWrite(motorPin20, 0);
-  analogWrite(motorPin21, velMotorDer);
-}
-void Atras()
-{
-  analogWrite(motorPin10, 0);
-  analogWrite(motorPin11, velMotorIzq);
-  analogWrite(motorPin20, 0);
-  analogWrite(motorPin21, velMotorDer);
-}
+        
+
+
+    }     
+     
+  
+     
+     
+    
+
+ 
